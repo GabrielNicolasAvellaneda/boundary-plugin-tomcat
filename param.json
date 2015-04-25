@@ -1,6 +1,6 @@
 {
 	"host": "localhost",
-	"port": "8888",
+	"port": "8080",
 	"path": "/manager/status",
 	"username": "admin",
 	"password": "password",

@@ -7,10 +7,10 @@ local string = require('string')
 
 local round = framework.util.round
 local auth = framework.util.auth
+local isHttpSuccess = framework.util.isHttpSuccess
 
 local function parseMetric(data, pattern)
   local _, _, val = string.find(data, pattern)
-  p(val)
 
   return tonumber(round(val, 2))
 end
@@ -39,6 +39,7 @@ end
 local params = framework.params
 params.name = 'Boundary Tomcat plugin'
 params.version = '1.1'
+params.tags = "tomcat,apache"
 
 local options = {}
 options.host = params.host
@@ -53,7 +54,7 @@ local data_source = WebRequestDataSource:new(options)
 --data_source:on('data', p)
 local plugin = Plugin:new(params, data_source)
 function plugin:onParseValues(data, extra)
-  if extra.status_code < 200 or extra.status_code >= 300 then
+  if not isHttpSuccess(extra.status_code) then
     self:error('HTTP Status Code ' .. extra.status_code)
     return 
   end
